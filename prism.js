@@ -3,21 +3,36 @@
 var prism = require('prismjs');
 var colors = require('ansi-256-colors');
 var fs = require('fs');
+var supportsColor = require('supports-color');
+
 
 (function(Token) {
     var ansi_mapping;
     if (fs.existsSync('~/.prismrc')) {
         ansi_mapping = require('~/.prismrc');
     } else {
-        ansi_mapping = {
-            'function': colors.fg.getRgb(0,2,3),
-            'comment': colors.fg.grayscale[9],
-            'keyword': colors.fg.getRgb(0,2,3),
-            'string': colors.fg.getRgb(0,2,0),
-            'punctuation': '',
-            'operator': '',
-            'number': colors.fg.getRgb(4,1,0)
-        };
+        console.log(supportsColor);
+        if (supportsColor.has256) {
+            ansi_mapping = {
+                'function': '\x1b[37m',
+                'comment': colors.fg.grayscale[9],
+                'keyword': colors.fg.getRgb(0,2,3),
+                'string': colors.fg.getRgb(0,2,0),
+                'punctuation': '',
+                'operator': '',
+                'number': colors.fg.getRgb(4,1,0)
+            };
+        } else {
+            ansi_mapping = {
+                'function': '\x1b[1;37m',
+                'comment': '\x1b[36m',
+                'keyword': '\x1b[01;34m',
+                'string': '\x1b[1;32m',
+                'punctuation': '',
+                'operator': '',
+                'number': '\x1b[01;31m'
+            };
+        }
     }
     var _ = prism;
     _.Token = function(type, content, alias, matchedStr, greedy) {
