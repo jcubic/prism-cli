@@ -1,0 +1,35 @@
+{
+  "name": "prism-cli",
+  "version": "0.1.0",
+  "description": "Syntax highlighting for command line",
+  "main": "index.js",
+  "scripts": {},
+  "bin": {
+    "prism": "prism.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcubic/prism-cli.git"
+  },
+  "keywords": [
+    "code",
+    "highlighting",
+    "sytax",
+    "color"
+  ],
+  "author": {
+    "name": "Jakub Jankiewicz",
+    "email": "jcubic@onet.pl",
+    "url": "http://jcubic.pl/me"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jcubic/prism-cli/issues"
+  },
+  "homepage": "https://github.com/jcubic/prism-cli#readme",
+  "dependencies": {
+    "ansi-256-colors": "^1.1.0",
+    "optimist": "^0.6.1",
+    "prismjs": "^1.6.0"
+  }
+}
