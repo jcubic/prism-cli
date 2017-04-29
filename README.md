@@ -30,7 +30,7 @@ if you want to use less you need to use -R option:
 prism --color=256 -l {LANGUAGE} -f {FILENAME} | less -R
 ```
 
-You need --color option because of [detection of 256 colors](https://github.com/chalk/supports-color) don't work in less because it's not real terminal. If your termianl don't support 256 colors you can use --color without argument.
+You need --color option because of [detection of 256 colors](https://github.com/chalk/supports-color) don't work in less because it's not real terminal. If your terminal don't support 256 colors you can use --color without argument.
 
 ## Contribution
 
