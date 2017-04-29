@@ -27,14 +27,10 @@ prism -l {LANGUAGE} -f {FILENAME}
 if you want to use less you need to use -R option:
 
 ```
-FORCE_COLOR=1 prism -l {LANGUAGE} -f {FILENAME} | less -R
+prism --color=256 -l {LANGUAGE} -f {FILENAME} | less -R
 ```
 
-FORCE_COLOR environment variable is needed because of [detection of 256 colors](https://github.com/chalk/supports-color) you can add this to your .bashrc file
-
-```
-echo "export FORCE_COLOR=1" >> ~/.bashrc
-```
+You need --color option because of [detection of 256 colors](https://github.com/chalk/supports-color) don't work in less because it's not real terminal. If your termianl don't support 256 colors you can use --color without argument.
 
 ## Contribution
 
