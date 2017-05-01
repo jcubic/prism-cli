@@ -11,7 +11,6 @@ var supportsColor = require('supports-color');
     if (fs.existsSync('~/.prismrc')) {
         ansi_mapping = require('~/.prismrc');
     } else {
-        console.log(supportsColor);
         if (supportsColor.has256) {
             ansi_mapping = {
                 'function': '\x1b[37m',
