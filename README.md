@@ -4,7 +4,7 @@ Prism-cli is small script for highlighting of source code files from command lin
 
 It use awesome [prism](https://github.com/PrismJS/prism) library by Lea Verou and support all languages that prism support but not all tokens are supported, ANSI colors are handled by [ansi-256-colors](https://github.com/jbnicolai/ansi-256-colors)
 
-[![npm](https://img.shields.io/badge/npm-0.3.0-blue.svg)](https://www.npmjs.com/package/prism-cli)
+[![npm](https://img.shields.io/badge/npm-0.3.1-blue.svg)](https://www.npmjs.com/package/prism-cli)
 
 ## Installation
 

@@ -59,7 +59,7 @@ var supportsColor = require('supports-color');
 
         _.hooks.run('wrap', env);
         function format(string) {
-            return ansi_mapping[env.type] + string + colors.reset;
+            return ansi_mapping[env.type] + string + '\x1b[0m';
         }
         if (typeof ansi_mapping[env.type] != 'undefined') {
             if (argv.n) {
