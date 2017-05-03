@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var prism = require('prismjs');
-var colors = require('ansi-256-colors');
 var fs = require('fs');
 var supportsColor = require('supports-color');
 
@@ -14,12 +13,12 @@ var supportsColor = require('supports-color');
         if (supportsColor.has256) {
             ansi_mapping = {
                 'function': '\x1b[37m',
-                'comment': colors.fg.grayscale[9],
-                'keyword': colors.fg.getRgb(0,2,3),
-                'string': colors.fg.getRgb(0,2,0),
+                'comment': '\x1b[38;5;241m',
+                'keyword': '\x1b[38;5;31m',
+                'string': '\x1b[38;5;28m',
                 'punctuation': '',
                 'operator': '',
-                'number': colors.fg.getRgb(4,1,0)
+                'number': '\x1b[38;5;166m',
             };
         } else {
             ansi_mapping = {
@@ -59,9 +58,15 @@ var supportsColor = require('supports-color');
         };
 
         _.hooks.run('wrap', env);
-
+        function format(string) {
+            return ansi_mapping[env.type] + string + colors.reset;
+        }
         if (typeof ansi_mapping[env.type] != 'undefined') {
-            return ansi_mapping[env.type] + env.content + colors.reset;
+            if (argv.n) {
+                return env.content.split('\n').map(format).join('\n');
+            } else {
+                return format(env.content);
+            }
         } else {
             return env.content;
         }
@@ -110,6 +115,9 @@ if (argv.l) {
         });
     }
 } else {
-    process.stdout.write('usage: prism -f {file} -l {language}\n\n' +
-                         'if file is missing the source to highlight is taken from stdin');
+    process.stdout.write('usage: prism [-f {file}] [-n] -l {language}\n\n' +
+                         '-f if file option is missing the source to high' +
+                         'lightis taken from stdin\n-n use this option if' +
+                         ' you want to have ANSI formatting on each line ' +
+                         'for multiline tokens line long comments');
 }
