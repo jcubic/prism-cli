@@ -47,4 +47,4 @@ If use some language that lack of colors for prism token you can create Pull Req
 
 Licensed under [MIT](http://opensource.org/licenses/MIT) license
 
-Copyright (c) 2017 [Jakub Jankiewicz](http://jcubic.pl/jakub-jankiewicz)
+Copyright (c) 2017 [Jakub T. Jankiewicz](https://jcubic.pl/jakub-jankiewicz)
