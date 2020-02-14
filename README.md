@@ -38,6 +38,12 @@ If for some reason you need ANSI formatting for each line, like when you have lo
 prism -l {LANGUAGE} -f {FILENAME} -n | tail -n 10
 ```
 
+If you need to get the html code instead of the terminal output you can pass the `--html` parameter
+
+```
+prism -l {LANGUAGE} -f {FILENAME} --html
+```
+
 ## Contribution
 
 If use some language that lack of colors for prism token you can create Pull Request, I will happly merge.

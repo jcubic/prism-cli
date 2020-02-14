@@ -4,76 +4,80 @@ var prism = require('prismjs');
 var fs = require('fs');
 var supportsColor = require('supports-color');
 
-
-(function(Token) {
-    var ansi_mapping;
-    if (fs.existsSync('~/.prismrc')) {
-        ansi_mapping = require('~/.prismrc');
-    } else {
-        if (supportsColor.has256) {
-            ansi_mapping = {
-                'function': '\x1b[37m',
-                'comment': '\x1b[38;5;241m',
-                'keyword': '\x1b[38;5;31m',
-                'string': '\x1b[38;5;28m',
-                'punctuation': '',
-                'operator': '',
-                'number': '\x1b[38;5;166m',
-            };
+function highjackRenderer () {
+    (function(Token) {
+        var ansi_mapping;
+        if (fs.existsSync('~/.prismrc')) {
+            ansi_mapping = require('~/.prismrc');
         } else {
-            ansi_mapping = {
-                'function': '\x1b[1;37m',
-                'comment': '\x1b[36m',
-                'keyword': '\x1b[01;34m',
-                'string': '\x1b[1;32m',
-                'punctuation': '',
-                'operator': '',
-                'number': '\x1b[01;31m'
-            };
-        }
-    }
-    var _ = prism;
-    _.Token = function(type, content, alias, matchedStr, greedy) {
-        Token.apply(this, [].slice.call(arguments));
-    };
-    _.Token.stringify = function(o, language, parent) {
-        if (typeof o == 'string') {
-            return o;
-        }
-
-        if (_.util.type(o) === 'Array') {
-            return o.map(function(element) {
-                return _.Token.stringify(element, language, o);
-            }).join('');
-        }
-
-        var env = {
-            type: o.type,
-            content: _.Token.stringify(o.content, language, parent),
-            tag: 'span',
-            classes: ['token', o.type],
-            attributes: {},
-            language: language,
-            parent: parent
-        };
-
-        _.hooks.run('wrap', env);
-        function format(string) {
-            return ansi_mapping[env.type] + string + '\x1b[0m';
-        }
-        if (typeof ansi_mapping[env.type] != 'undefined') {
-            if (argv.n) {
-                return env.content.split('\n').map(format).join('\n');
+            if (supportsColor.has256) {
+                ansi_mapping = {
+                    'function': '\x1b[37m',
+                    'comment': '\x1b[38;5;241m',
+                    'keyword': '\x1b[38;5;31m',
+                    'string': '\x1b[38;5;28m',
+                    'punctuation': '',
+                    'operator': '',
+                    'number': '\x1b[38;5;166m',
+                };
             } else {
-                return format(env.content);
+                ansi_mapping = {
+                    'function': '\x1b[1;37m',
+                    'comment': '\x1b[36m',
+                    'keyword': '\x1b[01;34m',
+                    'string': '\x1b[1;32m',
+                    'punctuation': '',
+                    'operator': '',
+                    'number': '\x1b[01;31m'
+                };
             }
-        } else {
-            return env.content;
         }
-    };
-})(prism.Token);
+        var _ = prism;
+        _.Token = function(type, content, alias, matchedStr, greedy) {
+            Token.apply(this, [].slice.call(arguments));
+        };
+        _.Token.stringify = function(o, language, parent) {
+            if (typeof o == 'string') {
+                return o;
+            }
+    
+            if (_.util.type(o) === 'Array') {
+                return o.map(function(element) {
+                    return _.Token.stringify(element, language, o);
+                }).join('');
+            }
+    
+            var env = {
+                type: o.type,
+                content: _.Token.stringify(o.content, language, parent),
+                tag: 'span',
+                classes: ['token', o.type],
+                attributes: {},
+                language: language,
+                parent: parent
+            };
+    
+            _.hooks.run('wrap', env);
+            function format(string) {
+                return ansi_mapping[env.type] + string + '\x1b[0m';
+            }
+            if (typeof ansi_mapping[env.type] != 'undefined') {
+                if (argv.n) {
+                    return env.content.split('\n').map(format).join('\n');
+                } else {
+                    return format(env.content);
+                }
+            } else {
+                return env.content;
+            }
+        };
+    })(prism.Token);
+}
 
-function higlight(text, language) {
+function higlight(text, language, cli) {
+    if (cli) {
+        highjackRenderer();
+    }
     var grammar = prism.languages[language];
     if (!grammar) {
         try {
@@ -84,7 +88,11 @@ function higlight(text, language) {
         }
     }
     var tokens = prism.tokenize(text, grammar);
-    return prism.Token.stringify(tokens, language);
+    var string = prism.Token.stringify(tokens, language);
+    if (!cli) {
+        string = '<pre class="language-' + language + '">' + string + '</pre>'
+    }
+    return string
 }
 
 var argv = require('optimist').argv;
@@ -94,7 +102,7 @@ if (argv.l) {
     function format(chunk) {
         if (chunk !== null) {
             try {
-                process.stdout.write(higlight(chunk.toString(), language));
+                process.stdout.write(higlight(chunk.toString(), language, argv.html !== true));
             } catch(e) {
                 process.stderr.write(e.message + "\n");
             }
@@ -115,9 +123,11 @@ if (argv.l) {
         });
     }
 } else {
-    process.stdout.write('usage: prism [-f {file}] [-n] -l {language}\n\n' +
+    process.stdout.write('usage: prism [-f {file}] [-n] [--html] -l {language}\n\n' +
                          '-f if file option is missing the source to high' +
                          'lightis taken from stdin\n-n use this option if' +
                          ' you want to have ANSI formatting on each line ' +
-                         'for multiline tokens line long comments');
+                         'for multiline tokens line long comments\n-html ' +
+                         'use this option if you want the output as html ' +
+                         'code instead of terminal colors');
 }
