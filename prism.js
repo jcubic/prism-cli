@@ -77,7 +77,7 @@ function higlight(text, language) {
     var grammar = prism.languages[language];
     if (!grammar) {
         try {
-            require('prismjs/components/prism-' + language);
+            require('prismjs/components/prism-' + language + '.min.js');
             grammar = prism.languages[language];
         } catch(e) {
             throw new Error('Uknown language ' + language);
