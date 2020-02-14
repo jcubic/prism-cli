@@ -84,7 +84,7 @@ function higlight(text, language, cli) {
             require('prismjs/components/prism-' + language + '.min.js');
             grammar = prism.languages[language];
         } catch(e) {
-            throw new Error('Uknown language ' + language);
+            throw new Error('Unknown language ' + language + ', available languages are ' + Object.keys(require('prismjs/components.js').languages).join(', '));
         }
     }
     var tokens = prism.tokenize(text, grammar);
