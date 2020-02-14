@@ -3,15 +3,15 @@
 var prism = require('prismjs');
 var fs = require('fs');
 var supportsColor = require('supports-color');
+var _ansi_mapping;
 
-function highjackRenderer () {
-    (function(Token) {
-        var ansi_mapping;
+function getAnsiMapping () {
+    if (_ansi_mapping === undefined) {
         if (fs.existsSync('~/.prismrc')) {
-            ansi_mapping = require('~/.prismrc');
+            _ansi_mapping = require('~/.prismrc');
         } else {
             if (supportsColor.has256) {
-                ansi_mapping = {
+                _ansi_mapping = {
                     'function': '\x1b[37m',
                     'comment': '\x1b[38;5;241m',
                     'keyword': '\x1b[38;5;31m',
@@ -21,7 +21,7 @@ function highjackRenderer () {
                     'number': '\x1b[38;5;166m',
                 };
             } else {
-                ansi_mapping = {
+                _ansi_mapping = {
                     'function': '\x1b[1;37m',
                     'comment': '\x1b[36m',
                     'keyword': '\x1b[01;34m',
@@ -32,52 +32,48 @@ function highjackRenderer () {
                 };
             }
         }
-        var _ = prism;
-        _.Token = function(type, content, alias, matchedStr, greedy) {
-            Token.apply(this, [].slice.call(arguments));
-        };
-        _.Token.stringify = function(o, language, parent) {
-            if (typeof o == 'string') {
-                return o;
-            }
-    
-            if (_.util.type(o) === 'Array') {
-                return o.map(function(element) {
-                    return _.Token.stringify(element, language, o);
-                }).join('');
-            }
-    
-            var env = {
-                type: o.type,
-                content: _.Token.stringify(o.content, language, parent),
-                tag: 'span',
-                classes: ['token', o.type],
-                attributes: {},
-                language: language,
-                parent: parent
-            };
-    
-            _.hooks.run('wrap', env);
-            function format(string) {
-                return ansi_mapping[env.type] + string + '\x1b[0m';
-            }
-            if (typeof ansi_mapping[env.type] != 'undefined') {
-                if (argv.n) {
-                    return env.content.split('\n').map(format).join('\n');
-                } else {
-                    return format(env.content);
-                }
-            } else {
-                return env.content;
-            }
-        };
-    })(prism.Token);
+    }
+    return _ansi_mapping;
+}
+
+function stringify (o, language, parent) {
+    if (typeof o == 'string') {
+        return o;
+    }
+
+    if (prism.util.type(o) === 'Array') {
+        return o.map(function(element) {
+            return stringify(element, language, o);
+        }).join('');
+    }
+
+    var env = {
+        type: o.type,
+        content: stringify(o.content, language, parent),
+        tag: 'span',
+        classes: ['token', o.type],
+        attributes: {},
+        language: language,
+        parent: parent
+    };
+
+    prism.hooks.run('wrap', env);
+    const ansi_mapping = getAnsiMapping()
+    function format(string) {
+        return ansi_mapping[env.type] + string + '\x1b[0m';
+    }
+    if (typeof ansi_mapping[env.type] != 'undefined') {
+        if (argv.n) {
+            return env.content.split('\n').map(format).join('\n');
+        } else {
+            return format(env.content);
+        }
+    } else {
+        return env.content;
+    }
 }
 
 function higlight(text, language, cli) {
-    if (cli) {
-        highjackRenderer();
-    }
     var grammar = prism.languages[language];
     if (!grammar) {
         try {
@@ -88,11 +84,10 @@ function higlight(text, language, cli) {
         }
     }
     var tokens = prism.tokenize(text, grammar);
-    var string = prism.Token.stringify(tokens, language);
     if (!cli) {
-        string = '<pre class="language-' + language + '">' + string + '</pre>'
+        return '<pre class="language-' + language + '">' + prism.Token.stringify(tokens, language) + '</pre>'
     }
-    return string
+    return stringify(tokens, language)
 }
 
 var argv = require('optimist').argv;
