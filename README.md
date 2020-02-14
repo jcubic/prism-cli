@@ -49,6 +49,11 @@ prism -l {LANGUAGE} -f {FILENAME} --html
 If use some language that lack of colors for prism token you can create Pull Request, I will happly merge.
 
 
+## Contributors
+
+- [Jakub T. Jankiewicz](https://jcubic.pl/jakub-jankiewicz)
+- [Martin Heidegger](https://github.com/martinheidegger)
+
 ## License
 
 Licensed under [MIT](http://opensource.org/licenses/MIT) license
