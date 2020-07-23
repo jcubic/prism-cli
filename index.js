@@ -4,7 +4,6 @@ var prism = require('prismjs');
 var fs = require('fs');
 var supportsColor = require('supports-color');
 
-
 (function(Token) {
     var ansi_mapping;
     if (fs.existsSync('~/.prismrc')) {
@@ -36,7 +35,7 @@ var supportsColor = require('supports-color');
     _.Token = function(type, content, alias, matchedStr, greedy) {
         Token.apply(this, [].slice.call(arguments));
     };
-    _.Token.stringify = function(o, language, parent) {
+    _.Token.stringify = function(o, language, parent, newlines) {
         if (typeof o == 'string') {
             return o;
         }
@@ -62,7 +61,7 @@ var supportsColor = require('supports-color');
             return ansi_mapping[env.type] + string + '\x1b[0m';
         }
         if (typeof ansi_mapping[env.type] != 'undefined') {
-            if (argv.n) {
+            if (newlines) {
                 return env.content.split('\n').map(format).join('\n');
             } else {
                 return format(env.content);
@@ -73,7 +72,7 @@ var supportsColor = require('supports-color');
     };
 })(prism.Token);
 
-function higlight(text, language) {
+function higlight(text, language, newlines) {
     var grammar = prism.languages[language];
     if (!grammar) {
         try {
@@ -84,40 +83,9 @@ function higlight(text, language) {
         }
     }
     var tokens = prism.tokenize(text, grammar);
-    return prism.Token.stringify(tokens, language);
+    return prism.Token.stringify(tokens, language, undefined, newlines);
 }
 
-var argv = require('optimist').argv;
 
-if (argv.l) {
-    var language = argv.l;
-    function format(chunk) {
-        if (chunk !== null) {
-            try {
-                process.stdout.write(higlight(chunk.toString(), language));
-            } catch(e) {
-                process.stderr.write(e.message + "\n");
-            }
-        }
-    }
-    if (argv.f) {
-        var filename = argv.f;
-        fs.readFile(filename, function(err, data) {
-            if (err) {
-                process.stdout.write(err.message);
-            } else {
-                format(data);
-            }
-        });
-    } else {
-        process.stdin.on('readable', function() {
-            format(process.stdin.read())
-        });
-    }
-} else {
-    process.stdout.write('usage: prism [-f {file}] [-n] -l {language}\n\n' +
-                         '-f if file option is missing the source to high' +
-                         'lightis taken from stdin\n-n use this option if' +
-                         ' you want to have ANSI formatting on each line ' +
-                         'for multiline tokens line long comments');
-}
+module.exports = higlight;
+

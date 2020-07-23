@@ -38,6 +38,18 @@ If for some reason you need ANSI formatting for each line, like when you have lo
 prism -l {LANGUAGE} -f {FILENAME} -n | tail -n 10
 ```
 
+## Node.js
+
+You can also use it as node.js module and highlight the text in your app.
+
+var highlight = require('prism-cli');
+
+```javascript
+console.log(hightlight('function(x) { return x * x; }', 'javascript'));
+```
+
+There is also 3rd optional argument to hightlight function which is `newline` flag same as -n in command line.
+
 ## Contribution
 
 If use some language that lack of colors for prism token you can create Pull Request, I will happly merge.

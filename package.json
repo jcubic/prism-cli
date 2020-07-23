@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {},
   "bin": {
-    "prism": "prism.js"
+    "prism": "bin/prism.js"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,12 @@
     "code",
     "highlighting",
     "sytax",
-    "color"
+    "color",
+    "ansi",
+    "terminal",
+    "cli",
+    "cmd",
+    "code"
   ],
   "author": {
     "name": "Jakub T. Jankiewicz",
