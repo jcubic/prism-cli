@@ -7,7 +7,7 @@ but not all tokens are supported, ANSI colors are handled by [ansi-256-colors](h
 If you want you can provide configuration file where you can use any colors you like and provide all the tokens that PrismJS
 support. If you create nice palette you can create an issue or PR I will check it and merge if it looks good.
 
-[![npm](https://img.shields.io/badge/npm-0.3.1-blue.svg)](https://www.npmjs.com/package/prism-cli)
+[![npm](https://img.shields.io/badge/npm-0.4.0-blue.svg)](https://www.npmjs.com/package/prism-cli)
 
 ## Preview
 
