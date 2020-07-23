@@ -70,7 +70,7 @@ that have PrismJS tokens that map to ASNI escapes.
 Example mapping for 256 color supported terminals:
 
 ```javascript
-ansi_mapping = {
+module.exports = {
   'function': '\x1b[37m',
   'comment': '\x1b[38;5;241m',
   'keyword': '\x1b[38;5;31m',
