@@ -9,7 +9,10 @@ if (argv.l) {
     function format(chunk) {
         if (chunk !== null) {
             try {
-                process.stdout.write(higlight(chunk.toString(), language, argv.n));
+                process.stdout.write(higlight(chunk.toString(), language, {
+                    html: argv.html,
+                    newlines: argv.n
+                }));
             } catch(e) {
                 process.stderr.write(e.message + "\n");
             }
@@ -30,9 +33,11 @@ if (argv.l) {
         });
     }
 } else {
-    process.stdout.write('usage: prism [-f {file}] [-n] -l {language}\n\n' +
+    process.stdout.write('usage: prism [-f {file}] [-n] [--html] -l {language}\n\n' +
                          '-f if file option is missing the source to high' +
                          'lightis taken from stdin\n-n use this option if' +
                          ' you want to have ANSI formatting on each line ' +
-                         'for multiline tokens line long comments');
+                         'for multiline tokens line long comments\n-html ' +
+                         'use this option if you want the output as html ' +
+                         'code instead of terminal colors');
 }
