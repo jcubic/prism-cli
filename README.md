@@ -7,7 +7,7 @@ but not all tokens are supported, ANSI colors are handled by [ansi-256-colors](h
 If you want you can provide configuration file where you can use any colors you like and provide all the tokens that PrismJS
 support. If you create nice palette you can create an issue or PR I will check it and merge if it looks good.
 
-[![npm](https://img.shields.io/badge/npm-0.4.0-blue.svg)](https://www.npmjs.com/package/prism-cli)
+[![npm](https://img.shields.io/badge/npm-0.5.0-blue.svg)](https://www.npmjs.com/package/prism-cli)
 
 ## Preview
 
@@ -63,6 +63,13 @@ console.log(hightlight('function(x) { return x * x; }', 'javascript'));
 ```
 
 There is also 3rd optional argument to hightlight function which is `newline` flag same as -n in command line.
+
+3rd argument to main function is options that are optional, it can accept this options:
+
+* `html` - indicate if it should return default html code from prism.
+* `newlines` - if set to true it will wrap each line in ANSI formatting.
+* `grammar` - prism.js grammar that you can load yourself (or you can have custom grammar).
+* `colors` - object with mapping `prism token` => `ANSI escape color`
 
 ## Config file
 

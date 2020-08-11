@@ -4,32 +4,35 @@ var prism = require('prismjs');
 var fs = require('fs');
 var supportsColor = require('supports-color');
 
-function highjackRenderer () {
+function highjackRenderer (ansi_mapping) {
     (function(Token) {
-        var ansi_mapping;
-        if (fs.existsSync('~/.prismrc')) {
-            ansi_mapping = require('~/.prismrc');
-        } else {
-            if (supportsColor.has256) {
-                ansi_mapping = {
-                    'function': '\x1b[37m',
-                    'comment': '\x1b[38;5;241m',
-                    'keyword': '\x1b[38;5;31m',
-                    'string': '\x1b[38;5;28m',
-                    'punctuation': '',
-                    'operator': '',
-                    'number': '\x1b[38;5;166m',
-                };
+        if (!ansi_mapping) {
+            if (fs.existsSync('~/.prismrc')) {
+                ansi_mapping = require('~/.prismrc');
             } else {
-                ansi_mapping = {
-                    'function': '\x1b[1;37m',
-                    'comment': '\x1b[36m',
-                    'keyword': '\x1b[01;34m',
-                    'string': '\x1b[1;32m',
-                    'punctuation': '',
-                    'operator': '',
-                    'number': '\x1b[01;31m'
-                };
+                if (supportsColor.has256) {
+                    ansi_mapping = {
+                        'function': '\x1b[37m',
+                        'comment': '\x1b[38;5;241m',
+                        'keyword': '\x1b[38;5;31m',
+                        'string': '\x1b[38;5;28m',
+                        'regex': '\x1b[38;166m',
+                        'punctuation': '',
+                        'operator': '',
+                        'number': '\x1b[38;5;160m',
+                    };
+                } else {
+                    ansi_mapping = {
+                        'function': '\x1b[1;37m',
+                        'comment': '\x1b[36m',
+                        'keyword': '\x1b[01;34m',
+                        'string': '\x1b[1;32m',
+                        'regex': '\x1b[1;33m',
+                        'punctuation': '',
+                        'operator': '',
+                        'number': '\x1b[01;31m'
+                    };
+                }
             }
         }
         var _ = prism;
@@ -75,11 +78,15 @@ function highjackRenderer () {
     })(prism.Token);
 }
 
-function higlight(text, language, { html, newlines }) {
+function higlight(text, language, { html, newlines, grammar, colors } = {}) {
     if (!html) {
-        highjackRenderer();
+        highjackRenderer(colors);
     }
-    var grammar = prism.languages[language];
+    if (grammar) {
+        prism.languages[language] = grammar;
+    } else {
+        grammar = prism.languages[language];
+    }
     if (!grammar) {
         try {
             require('prismjs/components/prism-' + language + '.min.js');
