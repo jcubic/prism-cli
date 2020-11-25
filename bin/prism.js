@@ -2,7 +2,9 @@
 
 var higlight = require('..');
 var fs = require('fs');
-var argv = require('optimist').argv;
+var lily = require('@jcubic/lily');
+
+var argv = lily(process.argv.slice(2), {boolean: ['html', 'n']});
 
 if (argv.l) {
     var language = argv.l;

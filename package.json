@@ -1,6 +1,6 @@
 {
   "name": "prism-cli",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Syntax highlighting for command line using ANSI Escape codes",
   "main": "index.js",
   "scripts": {},
@@ -33,8 +33,7 @@
   },
   "homepage": "https://github.com/jcubic/prism-cli#readme",
   "dependencies": {
-    "minimist": "^1.2.5",
-    "optimist": "^0.6.1",
+    "@jcubic/lily": "^0.1.0",
     "prismjs": "^1.22.0",
     "supports-color": "^7.2.0"
   }
