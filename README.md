@@ -1,13 +1,14 @@
-## Prims-cli
+# Prims-cli
 
 Prism-cli is small script for highlighting of source code files from command line
 
 It use awesome [PrismJS](https://github.com/PrismJS/prism) library by Lea Verou and support all languages that prism support,
 but not all tokens are supported, ANSI colors are handled by [ansi-256-colors](https://github.com/jbnicolai/ansi-256-colors).
 If you want you can provide configuration file where you can use any colors you like and provide all the tokens that PrismJS
-support. If you create nice palette you can create an issue or PR I will check it and merge if it looks good.
+support.
 
-[![npm](https://img.shields.io/badge/npm-0.5.0-blue.svg)](https://www.npmjs.com/package/prism-cli)
+[![npm](https://img.shields.io/badge/npm-0.5.3-blue.svg)](https://www.npmjs.com/package/prism-cli)
+[![GitHub license](https://img.shields.io/github/license/jcubic/prism-cli.svg)](https://github.com/jcubic/prism-cli/blob/master/LICENSE)
 
 ## Preview
 
@@ -95,12 +96,16 @@ List of all PrismJS tokens can be found in PrismJS source code in
 
 ## Contribution
 
-If use some language that lack of colors for prism token you can create Pull Request, I will happly merge.
+If you use some language that lack of colors for prism token, you can create Pull Request.
+I will happly merge your changes.
+
+If you create nice palette using configuration file, you can create an issue or PR,
+I will check it and merge if it looks good.
 
 
 ## Contributors
 
-- [Jakub T. Jankiewicz](https://jcubic.pl/jakub-jankiewicz)
+- [Jakub T. Jankiewicz](https://jcubic.pl/me)
 - [Martin Heidegger](https://github.com/martinheidegger)
 
 ## License

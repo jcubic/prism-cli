@@ -47,13 +47,13 @@ function highjackRenderer (ansi_mapping) {
 
             if (_.util.type(o) === 'Array') {
                 return o.map(function(element) {
-                    return _.Token.stringify(element, language, o);
+                    return _.Token.stringify(element, language, o, newlines);
                 }).join('');
             }
 
             var env = {
                 type: o.type,
-                content: _.Token.stringify(o.content, language, parent),
+                content: _.Token.stringify(o.content, language, parent, newlines),
                 tag: 'span',
                 classes: ['token', o.type],
                 attributes: {},
@@ -98,8 +98,8 @@ function higlight(text, language, { html, newlines, grammar, colors } = {}) {
                             languages.join(', '));
         }
     }
-    var tokens = prism.tokenize(text, grammar, undefined, newlines);
-    var string = prism.Token.stringify(tokens, language);
+    var tokens = prism.tokenize(text, grammar);
+    var string = prism.Token.stringify(tokens, language, undefined, newlines);
     if (html) {
         string = '<pre class="language-' + language + '">' + string + '</pre>';
     }
