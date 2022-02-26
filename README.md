@@ -57,9 +57,9 @@ prism -l {LANGUAGE} -f {FILENAME} --html
 
 You can also use it as node.js module and highlight the text in your app.
 
+```javascript
 var highlight = require('prism-cli');
 
-```javascript
 console.log(hightlight('function(x) { return x * x; }', 'javascript'));
 ```
 
